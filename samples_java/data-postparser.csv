@@ -1,0 +1,1573 @@
+repo_path,name,start,raw_code,code,doc,tokens
+FutureOfOrganizations/os-account-service.git /src/test/java/com/globant/os/accounts/component/admin/service/AdminServiceImplTest.java,setUp,43,"/**
+ * setUp method.
+ */
+@Before
+public void setUp() {
+    List<OsUser> users = new ArrayList<OsUser>();
+    List<Member> members = new ArrayList<Member>();
+    Community community = spy(new Community(""Globant""));
+    users.add(spy(new OsUser(""Jhon"", ""Doe"")));
+    users.add(spy(new OsUser(""Jhon2"", ""Doe2"")));
+    members.add(new Member(community, users.get(0), ""1"", ""jhon.doe@globant.com""));
+    members.add(new Member(community, users.get(1), ""2"", ""jhon.doe2@globant.com""));
+    when(userService.create(anyList())).thenReturn(users);
+    when(memberService.create(eq(COMMUNITY_ID), anyList())).thenReturn(members);
+    // Fix to get id of Entities
+    for (int i = 0; i < users.size(); i++) {
+        when(users.get(i).getId()).thenReturn((long) i);
+    }
+    when(community.getId()).thenReturn(COMMUNITY_ID);
+}","@Before
+public void setUp() {
+    List<OsUser> users = new ArrayList<OsUser>();
+    List<Member> members = new ArrayList<Member>();
+    Community community = spy(new Community(""Globant""));
+    users.add(spy(new OsUser(""Jhon"", ""Doe"")));
+    users.add(spy(new OsUser(""Jhon2"", ""Doe2"")));
+    members.add(new Member(community, users.get(0), ""1"", ""jhon.doe@globant.com""));
+    members.add(new Member(community, users.get(1), ""2"", ""jhon.doe2@globant.com""));
+    when(userService.create(anyList())).thenReturn(users);
+    when(memberService.create(eq(COMMUNITY_ID), anyList())).thenReturn(members);
+    for (int i = 0; i < users.size(); i++) {
+        when(users.get(i).getId()).thenReturn((long) i);
+    }
+    when(community.getId()).thenReturn(COMMUNITY_ID);
+}","setUp method.
+",Before public void setUp List OsUser users new ArrayList OsUser List Member members new ArrayList Member Community community spy new Community Globant users add spy new OsUser Jhon Doe users add spy new OsUser Jhon2 Doe2 members add new Member community users get 0 1 jhon doe globant com members add new Member community users get 1 2 jhon doe2 globant com when userService create anyList thenReturn users when memberService create eq COMMUNITY_ID anyList thenReturn members for int i 0 i users size i when users get i getId thenReturn long i when community getId thenReturn COMMUNITY_ID
+FutureOfOrganizations/os-account-service.git /src/test/java/com/globant/os/accounts/component/user/service/UserServiceImplTest.java,setUp,34,"/**
+ * setUp method.
+ */
+@Before
+public void setUp() {
+    userCreateCmd = new UserCreateCmd();
+    userCreateCmd.setFirstName(""John"");
+    userCreateCmd.setLastName(""Doe"");
+    userCreateCmd.setImage(""50D840B674A5C868F9091EE8FE0F2267"");
+    userCreateCmd.setBirthDate(LocalDate.of(1967, 07, 17).toString());
+}","@Before
+public void setUp() {
+    userCreateCmd = new UserCreateCmd();
+    userCreateCmd.setFirstName(""John"");
+    userCreateCmd.setLastName(""Doe"");
+    userCreateCmd.setImage(""50D840B674A5C868F9091EE8FE0F2267"");
+    userCreateCmd.setBirthDate(LocalDate.of(1967, 07, 17).toString());
+}","setUp method.
+",Before public void setUp userCreateCmd new UserCreateCmd userCreateCmd setFirstName John userCreateCmd setLastName Doe userCreateCmd setImage 50D840B674A5C868F9091EE8FE0F2267 userCreateCmd setBirthDate LocalDate of 1967 07 17 toString
+FutureOfOrganizations/os-account-service.git /src/test/java/com/globant/os/accounts/component/user/service/UserServiceImplTest.java,createUser,54,"/**
+ * Invoke {@link UserService#create(UserCreateCmd)}, validating gateway is called.
+ *
+ * <pre>
+ * Scenario:
+ *      1) Try to invoke {@link UserServiceImpl#create(UserCreateCmd)}.
+ * Expectations:
+ *      1) {@link UserGateway#save(OsUser)} is called.
+ *      3) created {@link OsUser} is returned.
+ * </pre>
+ */
+@Test
+public void createUser() {
+    OsUser user = getOsUser();
+    when(service.create(userCreateCmd)).thenReturn(user);
+    OsUser userCreated = service.create(userCreateCmd);
+    assertThat(userCreated).isNotNull();
+    assertThat(userCreated.getFirstName()).isEqualTo(userCreateCmd.getFirstName());
+    assertThat(userCreated.getLastName()).isEqualTo(userCreateCmd.getLastName());
+    assertThat(userCreated.getImage()).isEqualTo(userCreateCmd.getImage());
+    assertThat(userCreated.getBirthDate()).isEqualTo(userCreateCmd.getBirthDate());
+}","@Test
+public void createUser() {
+    OsUser user = getOsUser();
+    when(service.create(userCreateCmd)).thenReturn(user);
+    OsUser userCreated = service.create(userCreateCmd);
+    assertThat(userCreated).isNotNull();
+    assertThat(userCreated.getFirstName()).isEqualTo(userCreateCmd.getFirstName());
+    assertThat(userCreated.getLastName()).isEqualTo(userCreateCmd.getLastName());
+    assertThat(userCreated.getImage()).isEqualTo(userCreateCmd.getImage());
+    assertThat(userCreated.getBirthDate()).isEqualTo(userCreateCmd.getBirthDate());
+}","Invoke {@link UserService#create(UserCreateCmd)}, validating gateway is called.
+
+<pre>
+Scenario:
+     1) Try to invoke {@link UserServiceImpl#create(UserCreateCmd)}.
+Expectations:
+     1) {@link UserGateway#save(OsUser)} is called.
+     3) created {@link OsUser} is returned.
+</pre>
+",Test public void createUser OsUser user getOsUser when service create userCreateCmd thenReturn user OsUser userCreated service create userCreateCmd assertThat userCreated isNotNull assertThat userCreated getFirstName isEqualTo userCreateCmd getFirstName assertThat userCreated getLastName isEqualTo userCreateCmd getLastName assertThat userCreated getImage isEqualTo userCreateCmd getImage assertThat userCreated getBirthDate isEqualTo userCreateCmd getBirthDate
+FutureOfOrganizations/os-account-service.git /src/test/java/com/globant/os/accounts/support/aspect/TokenValidatorAspectTest.java,setupMock,38,"/**
+ * setUp method.
+ */
+@Before
+public void setupMock() {
+    MockitoAnnotations.initMocks(this);
+    userId = 1L;
+    communityId = 1L;
+    roles = Arrays.asList(new OsRole(""OS_APP""));
+    permissions = Arrays.asList(new OsPermission(""example:read""));
+    tokenType = Token.Type.APP;
+    mockPrincipal();
+}","@Before
+public void setupMock() {
+    MockitoAnnotations.initMocks(this);
+    userId = 1L;
+    communityId = 1L;
+    roles = Arrays.asList(new OsRole(""OS_APP""));
+    permissions = Arrays.asList(new OsPermission(""example:read""));
+    tokenType = Token.Type.APP;
+    mockPrincipal();
+}","setUp method.
+",Before public void setupMock MockitoAnnotations initMocks this userId 1L communityId 1L roles Arrays asList new OsRole OS_APP permissions Arrays asList new OsPermission example read tokenType Token Type APP mockPrincipal
+FutureOfOrganizations/os-account-service.git /src/test/java/com/globant/os/accounts/external/smu/io/gateway/pagination/PaginationTest.java,testGetData,22,"/**
+ * Test method for get data of list
+ * {@link com.globant.os.accounts.external.smu.io.gateway.pagination.Pagination#getData}
+ */
+@Test
+public void testGetData() {
+    Pagination.<String>getData(new Filter(1, 5), mockFunctionPaginator);
+    verifyCallGetData(1, 5);
+}","@Test
+public void testGetData() {
+    Pagination.<String>getData(new Filter(1, 5), mockFunctionPaginator);
+    verifyCallGetData(1, 5);
+}","Test method for get data of list
+{@link com.globant.os.accounts.external.smu.io.gateway.pagination.Pagination#getData}
+",Test public void testGetData Pagination String getData new Filter 1 5 mockFunctionPaginator verifyCallGetData 1 5
+FutureOfOrganizations/os-account-service.git /src/test/java/com/globant/os/accounts/external/smu/io/gateway/pagination/PaginationTest.java,testGetDataPageSizeDefault,32,"/**
+ * Test method for get data of list with default sizePage
+ * {@link com.globant.os.accounts.external.smu.io.gateway.pagination.Pagination#getData}
+ */
+@Test
+public void testGetDataPageSizeDefault() {
+    Pagination.<String>getData(new Filter(2), mockFunctionPaginator);
+    verifyCallGetData(2, 10);
+}","@Test
+public void testGetDataPageSizeDefault() {
+    Pagination.<String>getData(new Filter(2), mockFunctionPaginator);
+    verifyCallGetData(2, 10);
+}","Test method for get data of list with default sizePage
+{@link com.globant.os.accounts.external.smu.io.gateway.pagination.Pagination#getData}
+",Test public void testGetDataPageSizeDefault Pagination String getData new Filter 2 mockFunctionPaginator verifyCallGetData 2 10
+FutureOfOrganizations/os-account-service.git /src/test/java/com/globant/os/accounts/external/smu/io/gateway/pagination/PaginationTest.java,testGetDataDefaultFilter,42,"/**
+ * Test method for get data of list with filter default
+ * {@link com.globant.os.accounts.external.smu.io.gateway.pagination.Pagination#getData}
+ */
+@Test
+public void testGetDataDefaultFilter() {
+    Pagination.<String>getData(null, mockFunctionPaginator);
+    verifyCallGetData(0, 10);
+}","@Test
+public void testGetDataDefaultFilter() {
+    Pagination.<String>getData(null, mockFunctionPaginator);
+    verifyCallGetData(0, 10);
+}","Test method for get data of list with filter default
+{@link com.globant.os.accounts.external.smu.io.gateway.pagination.Pagination#getData}
+",Test public void testGetDataDefaultFilter Pagination String getData null mockFunctionPaginator verifyCallGetData 0 10
+FutureOfOrganizations/os-account-service.git /src/test/java/com/globant/os/accounts/external/smu/io/gateway/pagination/PaginationTest.java,testGetDataDefaultValues,52,"/**
+ * Test method for get data of list with default sizePage and page
+ * {@link com.globant.os.accounts.external.smu.io.gateway.pagination.Pagination#getData}
+ */
+@Test
+public void testGetDataDefaultValues() {
+    Pagination.<String>getData(new Filter(), mockFunctionPaginator);
+    verifyCallGetData(0, 10);
+}","@Test
+public void testGetDataDefaultValues() {
+    Pagination.<String>getData(new Filter(), mockFunctionPaginator);
+    verifyCallGetData(0, 10);
+}","Test method for get data of list with default sizePage and page
+{@link com.globant.os.accounts.external.smu.io.gateway.pagination.Pagination#getData}
+",Test public void testGetDataDefaultValues Pagination String getData new Filter mockFunctionPaginator verifyCallGetData 0 10
+FutureOfOrganizations/os-account-service.git /src/test/java/com/globant/os/accounts/external/smu/io/gateway/pagination/PaginationTest.java,verifyCallGetData,63,"/**
+ * Verify the called method of interface
+ * @param numberPage
+ * @param sizePage
+ */
+private void verifyCallGetData(int numberPage, int sizePage) {
+    ArgumentCaptor<Filter> argument = ArgumentCaptor.forClass(Filter.class);
+    verify(mockFunctionPaginator).execute(argument.capture());
+    assertThat(argument.getValue().getNumberPage()).isEqualTo(numberPage);
+    assertThat(argument.getValue().getSizePage()).isEqualTo(sizePage);
+}","private void verifyCallGetData(int numberPage, int sizePage) {
+    ArgumentCaptor<Filter> argument = ArgumentCaptor.forClass(Filter.class);
+    verify(mockFunctionPaginator).execute(argument.capture());
+    assertThat(argument.getValue().getNumberPage()).isEqualTo(numberPage);
+    assertThat(argument.getValue().getSizePage()).isEqualTo(sizePage);
+}","Verify the called method of interface
+
+@param numberPage
+@param sizePage
+",private void verifyCallGetData int numberPage int sizePage ArgumentCaptor Filter argument ArgumentCaptor forClass Filter class verify mockFunctionPaginator execute argument capture assertThat argument getValue getNumberPage isEqualTo numberPage assertThat argument getValue getSizePage isEqualTo sizePage
+FutureOfOrganizations/os-account-service.git /src/test/java/com/globant/os/accounts/external/shared/ClientConfigurationTest.java,testBuildClientConfiguration,16,"/**
+ * Test method for build ClientConfiguration
+ * {@link com.globant.os.accounts.component.shared.io.util.client
+ * ClientConfiguration#ClientConfiguration(String, EndpointType, int, int)}
+ */
+@Test
+public void testBuildClientConfiguration() {
+    ClientConfiguration clientConfiguration = new ClientConfiguration(SERVICE_ENDPOINT, 5, 10);
+    assertThat(clientConfiguration.getServiceEndpoint()).isEqualTo(SERVICE_ENDPOINT);
+    assertThat(clientConfiguration.getConnectionTimeout()).isEqualTo(5);
+    assertThat(clientConfiguration.getSocketTimeout()).isEqualTo(10);
+}","@Test
+public void testBuildClientConfiguration() {
+    ClientConfiguration clientConfiguration = new ClientConfiguration(SERVICE_ENDPOINT, 5, 10);
+    assertThat(clientConfiguration.getServiceEndpoint()).isEqualTo(SERVICE_ENDPOINT);
+    assertThat(clientConfiguration.getConnectionTimeout()).isEqualTo(5);
+    assertThat(clientConfiguration.getSocketTimeout()).isEqualTo(10);
+}","Test method for build ClientConfiguration
+{@link com.globant.os.accounts.component.shared.io.util.client
+ClientConfiguration#ClientConfiguration(String, EndpointType, int, int)}
+",Test public void testBuildClientConfiguration ClientConfiguration clientConfiguration new ClientConfiguration SERVICE_ENDPOINT 5 10 assertThat clientConfiguration getServiceEndpoint isEqualTo SERVICE_ENDPOINT assertThat clientConfiguration getConnectionTimeout isEqualTo 5 assertThat clientConfiguration getSocketTimeout isEqualTo 10
+FutureOfOrganizations/os-account-service.git /src/test/java/com/globant/os/accounts/external/shared/ClientConfigurationTest.java,testBuildClientConfigurationSettingData,29,"/**
+ * Test method for build ClientConfiguration setting data
+ * {@link com.globant.os.accounts.external.shared.ClientConfiguration#ClientConfiguration()}
+ */
+@Test
+public void testBuildClientConfigurationSettingData() {
+    ClientConfiguration clientConfiguration = new ClientConfiguration();
+    clientConfiguration.setServiceEndpoint(SERVICE_ENDPOINT);
+    clientConfiguration.setConnectionTimeout(8);
+    clientConfiguration.setSocketTimeout(20);
+    assertThat(clientConfiguration.getServiceEndpoint()).isEqualTo(SERVICE_ENDPOINT);
+    assertThat(clientConfiguration.getConnectionTimeout()).isEqualTo(8);
+    assertThat(clientConfiguration.getSocketTimeout()).isEqualTo(20);
+}","@Test
+public void testBuildClientConfigurationSettingData() {
+    ClientConfiguration clientConfiguration = new ClientConfiguration();
+    clientConfiguration.setServiceEndpoint(SERVICE_ENDPOINT);
+    clientConfiguration.setConnectionTimeout(8);
+    clientConfiguration.setSocketTimeout(20);
+    assertThat(clientConfiguration.getServiceEndpoint()).isEqualTo(SERVICE_ENDPOINT);
+    assertThat(clientConfiguration.getConnectionTimeout()).isEqualTo(8);
+    assertThat(clientConfiguration.getSocketTimeout()).isEqualTo(20);
+}","Test method for build ClientConfiguration setting data
+{@link com.globant.os.accounts.external.shared.ClientConfiguration#ClientConfiguration()}
+",Test public void testBuildClientConfigurationSettingData ClientConfiguration clientConfiguration new ClientConfiguration clientConfiguration setServiceEndpoint SERVICE_ENDPOINT clientConfiguration setConnectionTimeout 8 clientConfiguration setSocketTimeout 20 assertThat clientConfiguration getServiceEndpoint isEqualTo SERVICE_ENDPOINT assertThat clientConfiguration getConnectionTimeout isEqualTo 8 assertThat clientConfiguration getSocketTimeout isEqualTo 20
+FutureOfOrganizations/os-account-service.git /src/test/java/com/globant/os/accounts/external/shared/CredentialsTest.java,testBuildCredentials,17,"/**
+ * Test method for build Credentials
+ * {@link com.globant.os.accounts.external.shared.Credentials#Credentials(String, String)}
+ */
+@Test
+public void testBuildCredentials() {
+    Credentials credentials = new Credentials(ACCES_KEY, SECRET_KEY);
+    assertThat(credentials.getAccessKeyId()).isEqualTo(ACCES_KEY);
+    assertThat(credentials.getSecretKey()).isEqualTo(SECRET_KEY);
+    assertThat(credentials.getApiToken()).isNull();
+}","@Test
+public void testBuildCredentials() {
+    Credentials credentials = new Credentials(ACCES_KEY, SECRET_KEY);
+    assertThat(credentials.getAccessKeyId()).isEqualTo(ACCES_KEY);
+    assertThat(credentials.getSecretKey()).isEqualTo(SECRET_KEY);
+    assertThat(credentials.getApiToken()).isNull();
+}","Test method for build Credentials
+{@link com.globant.os.accounts.external.shared.Credentials#Credentials(String, String)}
+",Test public void testBuildCredentials Credentials credentials new Credentials ACCES_KEY SECRET_KEY assertThat credentials getAccessKeyId isEqualTo ACCES_KEY assertThat credentials getSecretKey isEqualTo SECRET_KEY assertThat credentials getApiToken isNull
+FutureOfOrganizations/os-account-service.git /src/test/java/com/globant/os/accounts/external/shared/CredentialsTest.java,testBuildCredentialsInvalid,30,"/**
+ * Test method for build Credentials, throw IllegalArgumentException on wrong parameters.
+ * {@link com.globant.os.accounts.external.shared.Credentials#Credentials(String, String)}
+ */
+@Test
+public void testBuildCredentialsInvalid() {
+    assertThatThrownBy(() -> new Credentials(null, SECRET_KEY), ""Secret key is wrong"").isInstanceOf(IllegalArgumentException.class);
+    assertThatThrownBy(() -> new Credentials(ACCES_KEY, null), ""Acces key is wrong"").isInstanceOf(IllegalArgumentException.class);
+}","@Test
+public void testBuildCredentialsInvalid() {
+    assertThatThrownBy(() -> new Credentials(null, SECRET_KEY), ""Secret key is wrong"").isInstanceOf(IllegalArgumentException.class);
+    assertThatThrownBy(() -> new Credentials(ACCES_KEY, null), ""Acces key is wrong"").isInstanceOf(IllegalArgumentException.class);
+}","Test method for build Credentials, throw IllegalArgumentException on wrong parameters.
+{@link com.globant.os.accounts.external.shared.Credentials#Credentials(String, String)}
+",Test public void testBuildCredentialsInvalid assertThatThrownBy new Credentials null SECRET_KEY Secret key is wrong isInstanceOf IllegalArgumentException class assertThatThrownBy new Credentials ACCES_KEY null Acces key is wrong isInstanceOf IllegalArgumentException class
+FutureOfOrganizations/os-account-service.git /src/test/java/com/globant/os/accounts/external/shared/CredentialsTest.java,testBuildCredentialsApiTokenInvalid,42,"/**
+ * Test method for build Credentials, throw IllegalArgumentException on wrong apiToken.
+ * {@link com.globant.smu.os.accounts.external.shared.clients.Credentials#Credentials(String)}
+ */
+@Test
+public void testBuildCredentialsApiTokenInvalid() {
+    assertThatThrownBy(() -> new Credentials(null), ""Api token is wrong"").isInstanceOf(IllegalArgumentException.class);
+}","@Test
+public void testBuildCredentialsApiTokenInvalid() {
+    assertThatThrownBy(() -> new Credentials(null), ""Api token is wrong"").isInstanceOf(IllegalArgumentException.class);
+}","Test method for build Credentials, throw IllegalArgumentException on wrong apiToken.
+{@link com.globant.smu.os.accounts.external.shared.clients.Credentials#Credentials(String)}
+",Test public void testBuildCredentialsApiTokenInvalid assertThatThrownBy new Credentials null Api token is wrong isInstanceOf IllegalArgumentException class
+FutureOfOrganizations/os-account-service.git /src/it/java/com/globant/os/accounts/constants/ConstantIt.java,ConstantIt,6,"/**
+ * Created by mayank.chaurasia on 24-10-2018.
+ */
+public class ConstantIt {
+
+    public enum KeyName {
+
+        COMMUNITY_ID(""communityId""), UPLOADER_ID(""uploaderId""), USER_ID(""userId""), GROUP_ID(""groupId""), LOGIN_ID(""loginId"");
+
+        private final String name;
+
+        KeyName(String name) {
+            this.name = name;
+        }
+
+        public String getName() {
+            return name;
+        }
+    }
+}","public class ConstantIt {
+
+    public enum KeyName {
+
+        COMMUNITY_ID(""communityId""), UPLOADER_ID(""uploaderId""), USER_ID(""userId""), GROUP_ID(""groupId""), LOGIN_ID(""loginId"");
+
+        private final String name;
+
+        KeyName(String name) {
+            this.name = name;
+        }
+
+        public String getName() {
+            return name;
+        }
+    }
+}","Created by mayank.chaurasia on 24-10-2018.
+",public class ConstantIt public enum KeyName COMMUNITY_ID communityId UPLOADER_ID uploaderId USER_ID userId GROUP_ID groupId LOGIN_ID loginId private final String name KeyName String name this name name public String getName return name
+FutureOfOrganizations/os-account-service.git /src/it/java/com/globant/os/accounts/ext/restdocs/RestDocs.java,RestDocs,16,"/**
+ * Utility methods for Spring REST Docs.
+ *
+ * @author osvaldo
+ */
+public class RestDocs {
+
+    private RestDocs() {
+        throw new IllegalStateException(""Utility class"");
+    }
+
+    public static ConditionalOperationPreprocessorBuilder checkRequest(Predicate<OperationRequest> predicate) {
+        return new ConditionalOperationPreprocessorBuilder(predicate, x -> false);
+    }
+
+    public static ConditionalOperationPreprocessorBuilder checkResponse(Predicate<OperationResponse> predicate) {
+        return new ConditionalOperationPreprocessorBuilder(x -> false, predicate);
+    }
+
+    public static class ConditionalOperationPreprocessorBuilder {
+
+        private final Predicate<OperationRequest> requestPred;
+
+        private final Predicate<OperationResponse> responsePred;
+
+        ConditionalOperationPreprocessorBuilder(Predicate<OperationRequest> requestPred, Predicate<OperationResponse> responsePred) {
+            this.requestPred = requireNonNull(requestPred, ""requestPred"");
+            this.responsePred = requireNonNull(responsePred, ""responsePred"");
+        }
+
+        public OperationPreprocessor then(OperationPreprocessor delegate) {
+            return new OperationPreprocessor() {
+
+                @Override
+                public OperationRequest preprocess(OperationRequest request) {
+                    return requestPred.test(request) ? delegate.preprocess(request) : request;
+                }
+
+                @Override
+                public OperationResponse preprocess(OperationResponse response) {
+                    return responsePred.test(response) ? delegate.preprocess(response) : response;
+                }
+            };
+        }
+    }
+}","public class RestDocs {
+
+    private RestDocs() {
+        throw new IllegalStateException(""Utility class"");
+    }
+
+    public static ConditionalOperationPreprocessorBuilder checkRequest(Predicate<OperationRequest> predicate) {
+        return new ConditionalOperationPreprocessorBuilder(predicate, x -> false);
+    }
+
+    public static ConditionalOperationPreprocessorBuilder checkResponse(Predicate<OperationResponse> predicate) {
+        return new ConditionalOperationPreprocessorBuilder(x -> false, predicate);
+    }
+
+    public static class ConditionalOperationPreprocessorBuilder {
+
+        private final Predicate<OperationRequest> requestPred;
+
+        private final Predicate<OperationResponse> responsePred;
+
+        ConditionalOperationPreprocessorBuilder(Predicate<OperationRequest> requestPred, Predicate<OperationResponse> responsePred) {
+            this.requestPred = requireNonNull(requestPred, ""requestPred"");
+            this.responsePred = requireNonNull(responsePred, ""responsePred"");
+        }
+
+        public OperationPreprocessor then(OperationPreprocessor delegate) {
+            return new OperationPreprocessor() {
+
+                @Override
+                public OperationRequest preprocess(OperationRequest request) {
+                    return requestPred.test(request) ? delegate.preprocess(request) : request;
+                }
+
+                @Override
+                public OperationResponse preprocess(OperationResponse response) {
+                    return responsePred.test(response) ? delegate.preprocess(response) : response;
+                }
+            };
+        }
+    }
+}","Utility methods for Spring REST Docs.
+
+@author osvaldo
+",public class RestDocs private RestDocs throw new IllegalStateException Utility class public static ConditionalOperationPreprocessorBuilder checkRequest Predicate OperationRequest predicate return new ConditionalOperationPreprocessorBuilder predicate x false public static ConditionalOperationPreprocessorBuilder checkResponse Predicate OperationResponse predicate return new ConditionalOperationPreprocessorBuilder x false predicate public static class ConditionalOperationPreprocessorBuilder private final Predicate OperationRequest requestPred private final Predicate OperationResponse responsePred ConditionalOperationPreprocessorBuilder Predicate OperationRequest requestPred Predicate OperationResponse responsePred this requestPred requireNonNull requestPred requestPred this responsePred requireNonNull responsePred responsePred public OperationPreprocessor then OperationPreprocessor delegate return new OperationPreprocessor Override public OperationRequest preprocess OperationRequest request return requestPred test request delegate preprocess request request Override public OperationResponse preprocess OperationResponse response return responsePred test response delegate preprocess response response
+FutureOfOrganizations/os-account-service.git /src/main/java/com/globant/os/accounts/component/shared/web/BooleanValue.java,BooleanValue,11,"/**
+ * Wrapper needed to POST or PUT simple JSON boolena values.
+ */
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class BooleanValue {
+
+    @NotNull
+    private Boolean value;
+}","@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class BooleanValue {
+
+    @NotNull
+    private Boolean value;
+}","Wrapper needed to POST or PUT simple JSON boolena values.
+",Data NoArgsConstructor AllArgsConstructor public class BooleanValue NotNull private Boolean value
+FutureOfOrganizations/os-account-service.git /src/main/java/com/globant/os/accounts/component/shared/io/gateway/graph/RegexPredicate.java,regex,68,"/**
+ * get a Regular expression predicate
+ *
+ * @param regex
+ * @return - the predicate
+ */
+public static P<Object> regex(Object regex) {
+    BiPredicate<Object, Object> b = new RegexPredicate(regex.toString());
+    return new P<Object>(b, regex);
+}","public static P<Object> regex(Object regex) {
+    BiPredicate<Object, Object> b = new RegexPredicate(regex.toString());
+    return new P<Object>(b, regex);
+}","get a Regular expression predicate
+
+@param regex
+@return - the predicate
+",public static P Object regex Object regex BiPredicate Object Object b new RegexPredicate regex toString return new P Object b regex
+FutureOfOrganizations/os-account-service.git /src/main/java/com/globant/os/accounts/component/shared/model/BaseEntity.java,BaseEntity,15,"/**
+ * The base class for main entities. Provides a version field by default and makes explicit the id getter.
+ *
+ * @author osvaldo
+ *
+ * @param <T> The Id type for this entity.
+ */
+@MappedSuperclass
+public abstract class BaseEntity<T> {
+
+    @Version
+    private short version;
+
+    @Getter
+    @Setter
+    private boolean enabled = true;
+
+    public abstract T getId();
+}","@MappedSuperclass
+public abstract class BaseEntity<T> {
+
+    @Version
+    private short version;
+
+    @Getter
+    @Setter
+    private boolean enabled = true;
+
+    public abstract T getId();
+}","The base class for main entities. Provides a version field by default and makes explicit the id getter.
+
+@author osvaldo
+@param <T> The Id type for this entity.
+",MappedSuperclass public abstract class BaseEntity T Version private short version Getter Setter private boolean enabled true public abstract T getId
+FutureOfOrganizations/os-account-service.git /src/main/java/com/globant/os/accounts/support/web/FindResult.java,FindResult,18,"/**
+ * Immutable class to return partial results in find operations.
+ *
+ * @author osvaldo
+ *
+ * @param <T> the type of elements.
+ */
+@Getter
+public final class FindResult<T> {
+
+    private static final FindResult<?> EMPTY = new FindResult<>(Collections.emptyList(), 0);
+
+    private final List<T> values;
+
+    private final long totalSize;
+
+    @SuppressWarnings(""unchecked"")
+    public static <T> FindResult<T> empty() {
+        return (FindResult<T>) EMPTY;
+    }
+
+    /**
+     * Creates a new FindResult
+     *
+     * @param values the list from the partial find operation.
+     * @param totalSize if known the total number of elements an unrestricted find would return. -1 otherwise.
+     */
+    public FindResult(List<T> values, long totalSize) {
+        this.values = requireNonNull(values, ""values"");
+        this.totalSize = totalSize;
+    }
+
+    /**
+     * Creates a new FindResult when the total size is unknown.
+     */
+    public FindResult(List<T> values) {
+        this(values, -1);
+    }
+
+    public boolean isTotalSizeKnown() {
+        return totalSize >= 0;
+    }
+
+    public <E> FindResult<E> map(Function<? super T, ? extends E> converter) {
+        return new FindResult<>(values.stream().map(converter).collect(toList()), totalSize);
+    }
+}","@Getter
+public final class FindResult<T> {
+
+    private static final FindResult<?> EMPTY = new FindResult<>(Collections.emptyList(), 0);
+
+    private final List<T> values;
+
+    private final long totalSize;
+
+    @SuppressWarnings(""unchecked"")
+    public static <T> FindResult<T> empty() {
+        return (FindResult<T>) EMPTY;
+    }
+
+    public FindResult(List<T> values, long totalSize) {
+        this.values = requireNonNull(values, ""values"");
+        this.totalSize = totalSize;
+    }
+
+    public FindResult(List<T> values) {
+        this(values, -1);
+    }
+
+    public boolean isTotalSizeKnown() {
+        return totalSize >= 0;
+    }
+
+    public <E> FindResult<E> map(Function<? super T, ? extends E> converter) {
+        return new FindResult<>(values.stream().map(converter).collect(toList()), totalSize);
+    }
+}","Immutable class to return partial results in find operations.
+
+@author osvaldo
+@param <T> the type of elements.
+",Getter public final class FindResult T private static final FindResult EMPTY new FindResult Collections emptyList 0 private final List T values private final long totalSize SuppressWarnings unchecked public static T FindResult T empty return FindResult T EMPTY public FindResult List T values long totalSize this values requireNonNull values values this totalSize totalSize public FindResult List T values this values 1 public boolean isTotalSizeKnown return totalSize 0 public E FindResult E map Function super T extends E converter return new FindResult values stream map converter collect toList totalSize
+FutureOfOrganizations/os-account-service.git /src/main/java/com/globant/os/accounts/external/smu/io/gateway/SmuMemberClientGateway.java,createMember,30,"/**
+ * Create a member
+ * @param memberCmd
+ * @param community
+ * @return a {@link MemberDetails} object representing the Member.
+ * @throws ResourceNotFoundException
+ * @throws NotAuthorizedException
+ * @throws BadRequestException
+ */
+Member createMember(MemberService.MemberCreationCmd memberCmd, Community community) throws ResourceNotFoundException, NotAuthorizedException, BadRequestException;","Member createMember(MemberService.MemberCreationCmd memberCmd, Community community) throws ResourceNotFoundException, NotAuthorizedException, BadRequestException;","Create a member
+
+@param memberCmd
+@param community
+@return a {@link MemberDetails} object representing the Member.
+@throws ResourceNotFoundException
+@throws NotAuthorizedException
+@throws BadRequestException
+",Member createMember MemberService MemberCreationCmd memberCmd Community community throws ResourceNotFoundException NotAuthorizedException BadRequestException
+FutureOfOrganizations/os-account-service.git /src/main/java/com/globant/os/accounts/external/smu/io/gateway/SmuMemberClientGateway.java,updateMember,42,"/**
+ * Update a member
+ * @param memberCmd
+ * @param community
+ * @return
+ * @throws ResourceNotFoundException
+ * @throws NotAuthorizedException
+ * @throws BadRequestException
+ */
+Member updateMember(MemberService.MemberUpdateCmd memberCmd, Community community) throws ResourceNotFoundException, NotAuthorizedException, BadRequestException;","Member updateMember(MemberService.MemberUpdateCmd memberCmd, Community community) throws ResourceNotFoundException, NotAuthorizedException, BadRequestException;","Update a member
+
+@param memberCmd
+@param community
+@return
+@throws ResourceNotFoundException
+@throws NotAuthorizedException
+@throws BadRequestException
+",Member updateMember MemberService MemberUpdateCmd memberCmd Community community throws ResourceNotFoundException NotAuthorizedException BadRequestException
+FutureOfOrganizations/os-account-service.git /src/main/java/com/globant/os/accounts/external/smu/io/gateway/SmuMemberClientGateway.java,getMember,52,"/**
+ * Retrieves a specific Member.
+ *
+ * @param community Community of Member.
+ * @param userId    User Id of Member.
+ * @return a {@link Member} object representing the Member.
+ */
+Optional<Member> getMember(Community community, long userId) throws ResourceNotFoundException, NotAuthorizedException, BadRequestException;","Optional<Member> getMember(Community community, long userId) throws ResourceNotFoundException, NotAuthorizedException, BadRequestException;","Retrieves a specific Member.
+
+@param community Community of Member.
+@param userId User Id of Member.
+@return a {@link Member} object representing the Member.
+",Optional Member getMember Community community long userId throws ResourceNotFoundException NotAuthorizedException BadRequestException
+FutureOfOrganizations/os-account-service.git /src/main/java/com/globant/os/accounts/external/smu/io/gateway/SmuMemberClientGateway.java,getMembers,65,"/**
+ * Retrieves a paginated list of members
+ *
+ * @param community Community of Member
+ * @param cmd to search members
+ * @return A SmuPage of {@link Member} object representing the Member
+ * @throws ResourceNotFoundException
+ * @throws NotAuthorizedException
+ * @throws BadRequestException
+ */
+FindResult<Member> getMembers(Community community, MemberBaseFindCmd cmd) throws ResourceNotFoundException, NotAuthorizedException, BadRequestException;","FindResult<Member> getMembers(Community community, MemberBaseFindCmd cmd) throws ResourceNotFoundException, NotAuthorizedException, BadRequestException;","Retrieves a paginated list of members
+
+@param community Community of Member
+@param cmd to search members
+@return A SmuPage of {@link Member} object representing the Member
+@throws ResourceNotFoundException
+@throws NotAuthorizedException
+@throws BadRequestException
+",FindResult Member getMembers Community community MemberBaseFindCmd cmd throws ResourceNotFoundException NotAuthorizedException BadRequestException
+FutureOfOrganizations/os-account-service.git /src/main/java/com/globant/os/accounts/external/smu/io/gateway/SmuMemberClientGateway.java,getMembersByIds,78,"/**
+ * Retrieves a list of members
+ *
+ * @param community Community of Member
+ * @param usersIds  list of ids to be searched
+ * @return A list of {@link OsMember} object representing the Member
+ * @throws ResourceNotFoundException
+ * @throws NotAuthorizedException
+ * @throws BadRequestException
+ */
+List<Member> getMembersByIds(Community community, long... usersIds) throws ResourceNotFoundException, NotAuthorizedException, BadRequestException;","List<Member> getMembersByIds(Community community, long... usersIds) throws ResourceNotFoundException, NotAuthorizedException, BadRequestException;","Retrieves a list of members
+
+@param community Community of Member
+@param usersIds list of ids to be searched
+@return A list of {@link OsMember} object representing the Member
+@throws ResourceNotFoundException
+@throws NotAuthorizedException
+@throws BadRequestException
+",List Member getMembersByIds Community community long usersIds throws ResourceNotFoundException NotAuthorizedException BadRequestException
+FutureOfOrganizations/os-account-service.git /src/main/java/com/globant/os/accounts/external/smu/io/gateway/SmuMemberClientGateway.java,getMemberConfig,91,"/**
+ * Retrieves the config member
+ *
+ * @param communityId Community Id of Member.
+ * @param userId      User Id of Member.
+ * @return A map key and value with the configs
+ * @throws ResourceNotFoundException
+ * @throws NotAuthorizedException
+ * @throws BadRequestException
+ */
+Map<String, String> getMemberConfig(long communityId, long userId) throws ResourceNotFoundException, NotAuthorizedException, BadRequestException;","Map<String, String> getMemberConfig(long communityId, long userId) throws ResourceNotFoundException, NotAuthorizedException, BadRequestException;","Retrieves the config member
+
+@param communityId Community Id of Member.
+@param userId User Id of Member.
+@return A map key and value with the configs
+@throws ResourceNotFoundException
+@throws NotAuthorizedException
+@throws BadRequestException
+",Map String String getMemberConfig long communityId long userId throws ResourceNotFoundException NotAuthorizedException BadRequestException
+FutureOfOrganizations/os-account-service.git /src/main/java/com/globant/os/accounts/external/smu/io/gateway/SmuMemberClientGateway.java,getMembersDetail,103,"/**
+ * Get user details form SMU.
+ *
+ * @param membersIds ids of members.
+ * @return list of members.
+ * @throws ResourceNotFoundException
+ * @throws NotAuthorizedException
+ * @throws BadRequestException
+ */
+List<SmuMemberDetailDto> getMembersDetail(String membersIds) throws ResourceNotFoundException, NotAuthorizedException, BadRequestException;","List<SmuMemberDetailDto> getMembersDetail(String membersIds) throws ResourceNotFoundException, NotAuthorizedException, BadRequestException;","Get user details form SMU.
+
+@param membersIds ids of members.
+@return list of members.
+@throws ResourceNotFoundException
+@throws NotAuthorizedException
+@throws BadRequestException
+",List SmuMemberDetailDto getMembersDetail String membersIds throws ResourceNotFoundException NotAuthorizedException BadRequestException
+FutureOfOrganizations/os-account-service.git /src/main/java/com/globant/os/accounts/external/smu/io/gateway/SmuMemberClientGateway.java,enabledOrDisabled,114,"/**
+ * Enable or disable member.
+ *
+ * @param communityId community.
+ * @param memberId member.
+ * @param value enable or disable member.
+ * @return member object. {@link Optional<Member>}
+ */
+Member enabledOrDisabled(Community community, long memberId, boolean value);","Member enabledOrDisabled(Community community, long memberId, boolean value);","Enable or disable member.
+
+@param communityId community.
+@param memberId member.
+@param value enable or disable member.
+@return member object. {@link Optional<Member>}
+",Member enabledOrDisabled Community community long memberId boolean value
+FutureOfOrganizations/os-account-service.git /src/main/java/com/globant/os/accounts/external/smu/io/gateway/SmuMemberClientGateway.java,updateMemberProperties,123,"/**
+ * Update properties of member
+ * @param community
+ * @param userId
+ * @param cmd
+ * @return List of properties were updated
+ */
+List<PropertyValue> updateMemberProperties(Community community, long userId, MemberUpdatePropertyCmd cmd);","List<PropertyValue> updateMemberProperties(Community community, long userId, MemberUpdatePropertyCmd cmd);","Update properties of member
+
+@param community
+@param userId
+@param cmd
+@return List of properties were updated
+",List PropertyValue updateMemberProperties Community community long userId MemberUpdatePropertyCmd cmd
+FutureOfOrganizations/os-account-service.git /src/main/java/com/globant/os/accounts/external/smu/io/gateway/SmuMemberClientGateway.java,getMemberByLoginId,132,"/**
+ * Retrieves a specific Member by loginId.
+ *
+ * @param community Community of Member.
+ * @param loginId LoginId of Member.
+ * @return a {@link Member} object representing the Member.
+ */
+Optional<Member> getMemberByLoginId(Community community, String loginId) throws ResourceNotFoundException, NotAuthorizedException, BadRequestException;","Optional<Member> getMemberByLoginId(Community community, String loginId) throws ResourceNotFoundException, NotAuthorizedException, BadRequestException;","Retrieves a specific Member by loginId.
+
+@param community Community of Member.
+@param loginId LoginId of Member.
+@return a {@link Member} object representing the Member.
+",Optional Member getMemberByLoginId Community community String loginId throws ResourceNotFoundException NotAuthorizedException BadRequestException
+FutureOfOrganizations/os-account-service.git /src/main/java/com/globant/os/accounts/external/smu/io/gateway/SmuCommunityClientGateway.java,getCommunity,27,"/**
+ * Retrieves a Community object by id
+ *
+ * @param long communityId
+ * @return A SmuPage of {@link Community} object representing the Community
+ * @throws ResourceNotFoundException
+ * @throws NotAuthorizedException
+ * @throws BadRequestException
+ */
+Optional<Community> getCommunity(long communityId);",Optional<Community> getCommunity(long communityId);,"Retrieves a Community object by id
+
+@param long communityId
+@return A SmuPage of {@link Community} object representing the Community
+@throws ResourceNotFoundException
+@throws NotAuthorizedException
+@throws BadRequestException
+",Optional Community getCommunity long communityId
+FutureOfOrganizations/os-account-service.git /src/main/java/com/globant/os/accounts/external/smu/io/gateway/SmuCommunityClientGateway.java,getCommunities,38,"/**
+ * Retrieves a paginated list of communities.
+ *
+ * @param cmd payload to find communities
+ * @return A page of {@link Community} object representing the Community
+ * @throws ResourceNotFoundException
+ * @throws NotAuthorizedException
+ * @throws BadRequestException
+ */
+FindResult<Community> getCommunities(CommunityFindCmd cmd);",FindResult<Community> getCommunities(CommunityFindCmd cmd);,"Retrieves a paginated list of communities.
+
+@param cmd payload to find communities
+@return A page of {@link Community} object representing the Community
+@throws ResourceNotFoundException
+@throws NotAuthorizedException
+@throws BadRequestException
+",FindResult Community getCommunities CommunityFindCmd cmd
+FutureOfOrganizations/os-account-service.git /src/main/java/com/globant/os/accounts/external/smu/io/gateway/SmuCommunityClientGateway.java,updateCommunity,48,"/**
+ * Update a community.
+ * @param communityInfo payload with community information.
+ * @return community.
+ * @throws ResourceNotFoundException
+ * @throws NotAuthorizedException
+ * @throws BadRequestException
+ */
+Optional<Community> updateCommunity(CommunityUpdateCmd communityInfo);",Optional<Community> updateCommunity(CommunityUpdateCmd communityInfo);,"Update a community.
+
+@param communityInfo payload with community information.
+@return community.
+@throws ResourceNotFoundException
+@throws NotAuthorizedException
+@throws BadRequestException
+",Optional Community updateCommunity CommunityUpdateCmd communityInfo
+FutureOfOrganizations/os-account-service.git /src/main/java/com/globant/os/accounts/external/smu/io/gateway/SmuCommunityClientGateway.java,createCommunity,58,"/**
+ * Create a community.
+ * @param cmd payload with communty information.
+ * @return Community was created
+ * @throws ResourceNotFoundException
+ * @throws NotAuthorizedException
+ * @throws BadRequestException
+ */
+Community createCommunity(CommunityCreationCmd cmd);",Community createCommunity(CommunityCreationCmd cmd);,"Create a community.
+
+@param cmd payload with communty information.
+@return Community was created
+@throws ResourceNotFoundException
+@throws NotAuthorizedException
+@throws BadRequestException
+",Community createCommunity CommunityCreationCmd cmd
+FutureOfOrganizations/os-account-service.git /src/main/java/com/globant/os/accounts/external/smu/io/gateway/SmuCommunityClientGateway.java,updateEnabledFlag,69,"/**
+ * Update enable flag from community
+ * @param communityId community identifier
+ * @param value value to set enabled flag
+ * @return community updated
+ * @throws ResourceNotFoundException
+ * @throws NotAuthorizedException
+ * @throws BadRequestException
+ */
+Community updateEnabledFlag(long communityId, boolean value);","Community updateEnabledFlag(long communityId, boolean value);","Update enable flag from community
+
+@param communityId community identifier
+@param value value to set enabled flag
+@return community updated
+@throws ResourceNotFoundException
+@throws NotAuthorizedException
+@throws BadRequestException
+",Community updateEnabledFlag long communityId boolean value
+FutureOfOrganizations/os-account-service.git /src/main/java/com/globant/os/accounts/external/smu/io/gateway/SmuCommunityClientGateway.java,updateCommunityConfigs,80,"/**
+ * Update a community config.
+ * @param communityId community identifier
+ * @param cmds payload with community config information
+ * @return list of community configs
+ * @throws ResourceNotFoundException
+ * @throws NotAuthorizedException
+ * @throws BadRequestException
+ */
+List<CommunityConfig> updateCommunityConfigs(long communityId, List<CommunityConfigUpdateCmd> cmds);","List<CommunityConfig> updateCommunityConfigs(long communityId, List<CommunityConfigUpdateCmd> cmds);","Update a community config.
+
+@param communityId community identifier
+@param cmds payload with community config information
+@return list of community configs
+@throws ResourceNotFoundException
+@throws NotAuthorizedException
+@throws BadRequestException
+",List CommunityConfig updateCommunityConfigs long communityId List CommunityConfigUpdateCmd cmds
+FutureOfOrganizations/os-account-service.git /src/main/java/com/globant/os/accounts/external/smu/model/OsResponseError.java,OsResponseError,9,"/**
+ * Represent Accounts response error.
+ */
+public class OsResponseError {
+
+    /**
+     * The timestamp.
+     */
+    private Timestamp timestamp;
+
+    /**
+     * The http status code.
+     */
+    private int status;
+
+    /**
+     * The http error.
+     */
+    private String error;
+
+    /**
+     * The message.
+     */
+    private String message;
+
+    /**
+     * The request path.
+     */
+    private String path;
+
+    /**
+     * Gets the timestamp.
+     *
+     * @return the timestamp
+     */
+    public Timestamp getTimestamp() {
+        return timestamp;
+    }
+
+    /**
+     * Sets the timestamp.
+     *
+     * @param timestamp
+     *          the new timestamp
+     */
+    public void setTimestamp(Timestamp timestamp) {
+        this.timestamp = timestamp;
+    }
+
+    /**
+     * Gets the status.
+     *
+     * @return the status
+     */
+    public int getStatus() {
+        return status;
+    }
+
+    /**
+     * Sets the status.
+     *
+     * @param status
+     *          the new status
+     */
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
+    /**
+     * Gets the error.
+     *
+     * @return the error
+     */
+    public String getError() {
+        return error;
+    }
+
+    /**
+     * Sets the error.
+     *
+     * @param error
+     *          the new error
+     */
+    public void setError(String error) {
+        this.error = error;
+    }
+
+    /**
+     * Gets the message.
+     *
+     * @return the message
+     */
+    public String getMessage() {
+        return message;
+    }
+
+    /**
+     * Sets the message.
+     *
+     * @param message
+     *          the new message
+     */
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    /**
+     * Gets the request path.
+     *
+     * @return the request path
+     */
+    public String getPath() {
+        return path;
+    }
+
+    /**
+     * Sets the request path.
+     *
+     * @param path
+     *          the new request path
+     */
+    public void setPath(String path) {
+        this.path = path;
+    }
+}","public class OsResponseError {
+
+    private Timestamp timestamp;
+
+    private int status;
+
+    private String error;
+
+    private String message;
+
+    private String path;
+
+    public Timestamp getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(Timestamp timestamp) {
+        this.timestamp = timestamp;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
+    public String getError() {
+        return error;
+    }
+
+    public void setError(String error) {
+        this.error = error;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
+    }
+}","Represent Accounts response error.
+",public class OsResponseError private Timestamp timestamp private int status private String error private String message private String path public Timestamp getTimestamp return timestamp public void setTimestamp Timestamp timestamp this timestamp timestamp public int getStatus return status public void setStatus int status this status status public String getError return error public void setError String error this error error public String getMessage return message public void setMessage String message this message message public String getPath return path public void setPath String path this path path
+FutureOfOrganizations/os-account-service.git /src/main/java/com/globant/os/accounts/external/smu/model/OsResponseError.java,getTimestamp,31,"/**
+ * Gets the timestamp.
+ *
+ * @return the timestamp
+ */
+public Timestamp getTimestamp() {
+    return timestamp;
+}","public Timestamp getTimestamp() {
+    return timestamp;
+}","Gets the timestamp.
+
+@return the timestamp
+",public Timestamp getTimestamp return timestamp
+FutureOfOrganizations/os-account-service.git /src/main/java/com/globant/os/accounts/external/smu/model/OsResponseError.java,setTimestamp,41,"/**
+ * Sets the timestamp.
+ *
+ * @param timestamp
+ *          the new timestamp
+ */
+public void setTimestamp(Timestamp timestamp) {
+    this.timestamp = timestamp;
+}","public void setTimestamp(Timestamp timestamp) {
+    this.timestamp = timestamp;
+}","Sets the timestamp.
+
+@param timestamp the new timestamp
+",public void setTimestamp Timestamp timestamp this timestamp timestamp
+FutureOfOrganizations/os-account-service.git /src/main/java/com/globant/os/accounts/external/smu/model/OsResponseError.java,getStatus,50,"/**
+ * Gets the status.
+ *
+ * @return the status
+ */
+public int getStatus() {
+    return status;
+}","public int getStatus() {
+    return status;
+}","Gets the status.
+
+@return the status
+",public int getStatus return status
+FutureOfOrganizations/os-account-service.git /src/main/java/com/globant/os/accounts/external/smu/model/OsResponseError.java,setStatus,60,"/**
+ * Sets the status.
+ *
+ * @param status
+ *          the new status
+ */
+public void setStatus(int status) {
+    this.status = status;
+}","public void setStatus(int status) {
+    this.status = status;
+}","Sets the status.
+
+@param status the new status
+",public void setStatus int status this status status
+FutureOfOrganizations/os-account-service.git /src/main/java/com/globant/os/accounts/external/smu/model/OsResponseError.java,getError,69,"/**
+ * Gets the error.
+ *
+ * @return the error
+ */
+public String getError() {
+    return error;
+}","public String getError() {
+    return error;
+}","Gets the error.
+
+@return the error
+",public String getError return error
+FutureOfOrganizations/os-account-service.git /src/main/java/com/globant/os/accounts/external/smu/model/OsResponseError.java,setError,79,"/**
+ * Sets the error.
+ *
+ * @param error
+ *          the new error
+ */
+public void setError(String error) {
+    this.error = error;
+}","public void setError(String error) {
+    this.error = error;
+}","Sets the error.
+
+@param error the new error
+",public void setError String error this error error
+FutureOfOrganizations/os-account-service.git /src/main/java/com/globant/os/accounts/external/smu/model/OsResponseError.java,getMessage,88,"/**
+ * Gets the message.
+ *
+ * @return the message
+ */
+public String getMessage() {
+    return message;
+}","public String getMessage() {
+    return message;
+}","Gets the message.
+
+@return the message
+",public String getMessage return message
+FutureOfOrganizations/os-account-service.git /src/main/java/com/globant/os/accounts/external/smu/model/OsResponseError.java,setMessage,98,"/**
+ * Sets the message.
+ *
+ * @param message
+ *          the new message
+ */
+public void setMessage(String message) {
+    this.message = message;
+}","public void setMessage(String message) {
+    this.message = message;
+}","Sets the message.
+
+@param message the new message
+",public void setMessage String message this message message
+FutureOfOrganizations/os-account-service.git /src/main/java/com/globant/os/accounts/external/smu/model/OsResponseError.java,getPath,107,"/**
+ * Gets the request path.
+ *
+ * @return the request path
+ */
+public String getPath() {
+    return path;
+}","public String getPath() {
+    return path;
+}","Gets the request path.
+
+@return the request path
+",public String getPath return path
+FutureOfOrganizations/os-account-service.git /src/main/java/com/globant/os/accounts/external/smu/model/OsResponseError.java,setPath,117,"/**
+ * Sets the request path.
+ *
+ * @param path
+ *          the new request path
+ */
+public void setPath(String path) {
+    this.path = path;
+}","public void setPath(String path) {
+    this.path = path;
+}","Sets the request path.
+
+@param path the new request path
+",public void setPath String path this path path
+FutureOfOrganizations/os-account-service.git /src/main/java/com/globant/os/accounts/external/shared/Credentials.java,Credentials,7,"/**
+ * Basic implementation of Credentials that allows pass access key and secret access in the constructor or apiToken in
+ * the constructor.
+ */
+public class Credentials {
+
+    /**
+     * The access key.
+     */
+    private final String accessKey;
+
+    /**
+     * The secret key.
+     */
+    private final String secretKey;
+
+    /**
+     * The api token.
+     */
+    private final String apiToken;
+
+    /**
+     * Constructs a new Credentials object, with the specified access key and secret key.
+     *
+     * @param accessKey
+     *          The access key.
+     * @param secretKey
+     *          The secret access key.
+     */
+    public Credentials(String accessKey, String secretKey) {
+        if (accessKey == null) {
+            throw new IllegalArgumentException(""Access key cannot be null."");
+        }
+        if (secretKey == null) {
+            throw new IllegalArgumentException(""Secret key cannot be null."");
+        }
+        this.accessKey = accessKey;
+        this.secretKey = secretKey;
+        this.apiToken = null;
+    }
+
+    /**
+     * Constructs a new Credentials object, with the specified apiToken.
+     *
+     * @param apiToken
+     *          The api token of service.
+     */
+    public Credentials(String apiToken) {
+        if (apiToken == null) {
+            throw new IllegalArgumentException(""Access key cannot be null."");
+        }
+        this.apiToken = apiToken;
+        this.accessKey = null;
+        this.secretKey = null;
+    }
+
+    /**
+     * Gets the access key id.
+     *
+     * @return the access key id
+     */
+    public String getAccessKeyId() {
+        return accessKey;
+    }
+
+    /**
+     * Gets the secret key.
+     *
+     * @return the secret key
+     */
+    public String getSecretKey() {
+        return secretKey;
+    }
+
+    /**
+     * Gets the api token.
+     *
+     * @return the api token
+     */
+    public String getApiToken() {
+        return apiToken;
+    }
+}","public class Credentials {
+
+    private final String accessKey;
+
+    private final String secretKey;
+
+    private final String apiToken;
+
+    public Credentials(String accessKey, String secretKey) {
+        if (accessKey == null) {
+            throw new IllegalArgumentException(""Access key cannot be null."");
+        }
+        if (secretKey == null) {
+            throw new IllegalArgumentException(""Secret key cannot be null."");
+        }
+        this.accessKey = accessKey;
+        this.secretKey = secretKey;
+        this.apiToken = null;
+    }
+
+    public Credentials(String apiToken) {
+        if (apiToken == null) {
+            throw new IllegalArgumentException(""Access key cannot be null."");
+        }
+        this.apiToken = apiToken;
+        this.accessKey = null;
+        this.secretKey = null;
+    }
+
+    public String getAccessKeyId() {
+        return accessKey;
+    }
+
+    public String getSecretKey() {
+        return secretKey;
+    }
+
+    public String getApiToken() {
+        return apiToken;
+    }
+}","Basic implementation of Credentials that allows pass access key and secret access in the constructor or apiToken in
+the constructor.
+",public class Credentials private final String accessKey private final String secretKey private final String apiToken public Credentials String accessKey String secretKey if accessKey null throw new IllegalArgumentException Access key cannot be null if secretKey null throw new IllegalArgumentException Secret key cannot be null this accessKey accessKey this secretKey secretKey this apiToken null public Credentials String apiToken if apiToken null throw new IllegalArgumentException Access key cannot be null this apiToken apiToken this accessKey null this secretKey null public String getAccessKeyId return accessKey public String getSecretKey return secretKey public String getApiToken return apiToken
+FutureOfOrganizations/os-account-service.git /src/main/java/com/globant/os/accounts/external/shared/Credentials.java,getAccessKeyId,60,"/**
+ * Gets the access key id.
+ *
+ * @return the access key id
+ */
+public String getAccessKeyId() {
+    return accessKey;
+}","public String getAccessKeyId() {
+    return accessKey;
+}","Gets the access key id.
+
+@return the access key id
+",public String getAccessKeyId return accessKey
+FutureOfOrganizations/os-account-service.git /src/main/java/com/globant/os/accounts/external/shared/Credentials.java,getSecretKey,69,"/**
+ * Gets the secret key.
+ *
+ * @return the secret key
+ */
+public String getSecretKey() {
+    return secretKey;
+}","public String getSecretKey() {
+    return secretKey;
+}","Gets the secret key.
+
+@return the secret key
+",public String getSecretKey return secretKey
+FutureOfOrganizations/os-account-service.git /src/main/java/com/globant/os/accounts/external/shared/Credentials.java,getApiToken,78,"/**
+ * Gets the api token.
+ *
+ * @return the api token
+ */
+public String getApiToken() {
+    return apiToken;
+}","public String getApiToken() {
+    return apiToken;
+}","Gets the api token.
+
+@return the api token
+",public String getApiToken return apiToken
+FutureOfOrganizations/os-account-service.git /src/main/java/com/globant/os/accounts/external/shared/ClientConfiguration.java,ClientConfiguration,7,"/**
+ * A configuration required to submit requests to a service.
+ */
+public class ClientConfiguration {
+
+    /**
+     * The default timeout for creating new connections.
+     */
+    public static final int DEFAULT_CONNECTION_TIMEOUT = 10;
+
+    /**
+     * The default timeout for reading from a connected socket.
+     */
+    public static final int DEFAULT_SOCKET_TIMEOUT = 50;
+
+    /**
+     * The service endpoint.
+     */
+    private String serviceEndpoint;
+
+    /**
+     * The amount of time to wait (in seconds) for data to be transfered over an established, open connection before the
+     * connection is timed out. A value of 0 means infinity, and is not recommended.
+     */
+    private int socketTimeout = DEFAULT_SOCKET_TIMEOUT;
+
+    /**
+     * The amount of time to wait (in seconds) when initially establishing a connection before giving up and timing out. A
+     * value of 0 means infinity, and is not recommended.
+     */
+    private int connectionTimeout = DEFAULT_CONNECTION_TIMEOUT;
+
+    /**
+     * Instantiates a new client configuration.
+     */
+    public ClientConfiguration() {
+        super();
+    }
+
+    /**
+     * Instantiates a new client configuration.
+     *
+     * @param serviceEndpoint
+     *          the service endpoint
+     */
+    public ClientConfiguration(String serviceEndpoint) {
+        super();
+        this.serviceEndpoint = serviceEndpoint;
+    }
+
+    /**
+     * Instantiates a new client configuration.
+     *
+     * @param serviceEndpoint
+     *          the service endpoint
+     *
+     * @param type
+     *          Type of service endpoint
+     * @param connectionTimeout
+     *          the connection timeout
+     * @param socketTimeout
+     *          the socket timeout
+     */
+    public ClientConfiguration(String serviceEndpoint, int connectionTimeout, int socketTimeout) {
+        super();
+        this.serviceEndpoint = serviceEndpoint;
+        this.connectionTimeout = connectionTimeout;
+        this.socketTimeout = socketTimeout;
+    }
+
+    /**
+     * Gets the service endpoint.
+     *
+     * @return the service endpoint
+     */
+    public String getServiceEndpoint() {
+        return serviceEndpoint;
+    }
+
+    /**
+     * Sets the service endpoint.
+     *
+     * @param serviceEndpoint
+     *          the new service endpoint
+     */
+    public void setServiceEndpoint(String serviceEndpoint) {
+        this.serviceEndpoint = serviceEndpoint;
+    }
+
+    /**
+     * Gets the socket timeout.
+     *
+     * @return the socket timeout
+     */
+    public int getSocketTimeout() {
+        return socketTimeout;
+    }
+
+    /**
+     * Sets the socket timeout.
+     *
+     * @param socketTimeout
+     *          the new socket timeout
+     */
+    public void setSocketTimeout(int socketTimeout) {
+        this.socketTimeout = socketTimeout;
+    }
+
+    /**
+     * Gets the connection timeout.
+     *
+     * @return the connection timeout
+     */
+    public int getConnectionTimeout() {
+        return connectionTimeout;
+    }
+
+    /**
+     * Sets the connection timeout.
+     *
+     * @param connectionTimeout
+     *          the new connection timeout
+     */
+    public void setConnectionTimeout(int connectionTimeout) {
+        this.connectionTimeout = connectionTimeout;
+    }
+}","public class ClientConfiguration {
+
+    public static final int DEFAULT_CONNECTION_TIMEOUT = 10;
+
+    public static final int DEFAULT_SOCKET_TIMEOUT = 50;
+
+    private String serviceEndpoint;
+
+    private int socketTimeout = DEFAULT_SOCKET_TIMEOUT;
+
+    private int connectionTimeout = DEFAULT_CONNECTION_TIMEOUT;
+
+    public ClientConfiguration() {
+        super();
+    }
+
+    public ClientConfiguration(String serviceEndpoint) {
+        super();
+        this.serviceEndpoint = serviceEndpoint;
+    }
+
+    public ClientConfiguration(String serviceEndpoint, int connectionTimeout, int socketTimeout) {
+        super();
+        this.serviceEndpoint = serviceEndpoint;
+        this.connectionTimeout = connectionTimeout;
+        this.socketTimeout = socketTimeout;
+    }
+
+    public String getServiceEndpoint() {
+        return serviceEndpoint;
+    }
+
+    public void setServiceEndpoint(String serviceEndpoint) {
+        this.serviceEndpoint = serviceEndpoint;
+    }
+
+    public int getSocketTimeout() {
+        return socketTimeout;
+    }
+
+    public void setSocketTimeout(int socketTimeout) {
+        this.socketTimeout = socketTimeout;
+    }
+
+    public int getConnectionTimeout() {
+        return connectionTimeout;
+    }
+
+    public void setConnectionTimeout(int connectionTimeout) {
+        this.connectionTimeout = connectionTimeout;
+    }
+}","A configuration required to submit requests to a service.
+",public class ClientConfiguration public static final int DEFAULT_CONNECTION_TIMEOUT 10 public static final int DEFAULT_SOCKET_TIMEOUT 50 private String serviceEndpoint private int socketTimeout DEFAULT_SOCKET_TIMEOUT private int connectionTimeout DEFAULT_CONNECTION_TIMEOUT public ClientConfiguration super public ClientConfiguration String serviceEndpoint super this serviceEndpoint serviceEndpoint public ClientConfiguration String serviceEndpoint int connectionTimeout int socketTimeout super this serviceEndpoint serviceEndpoint this connectionTimeout connectionTimeout this socketTimeout socketTimeout public String getServiceEndpoint return serviceEndpoint public void setServiceEndpoint String serviceEndpoint this serviceEndpoint serviceEndpoint public int getSocketTimeout return socketTimeout public void setSocketTimeout int socketTimeout this socketTimeout socketTimeout public int getConnectionTimeout return connectionTimeout public void setConnectionTimeout int connectionTimeout this connectionTimeout connectionTimeout
+FutureOfOrganizations/os-account-service.git /src/main/java/com/globant/os/accounts/external/shared/ClientConfiguration.java,getServiceEndpoint,73,"/**
+ * Gets the service endpoint.
+ *
+ * @return the service endpoint
+ */
+public String getServiceEndpoint() {
+    return serviceEndpoint;
+}","public String getServiceEndpoint() {
+    return serviceEndpoint;
+}","Gets the service endpoint.
+
+@return the service endpoint
+",public String getServiceEndpoint return serviceEndpoint
+FutureOfOrganizations/os-account-service.git /src/main/java/com/globant/os/accounts/external/shared/ClientConfiguration.java,setServiceEndpoint,83,"/**
+ * Sets the service endpoint.
+ *
+ * @param serviceEndpoint
+ *          the new service endpoint
+ */
+public void setServiceEndpoint(String serviceEndpoint) {
+    this.serviceEndpoint = serviceEndpoint;
+}","public void setServiceEndpoint(String serviceEndpoint) {
+    this.serviceEndpoint = serviceEndpoint;
+}","Sets the service endpoint.
+
+@param serviceEndpoint the new service endpoint
+",public void setServiceEndpoint String serviceEndpoint this serviceEndpoint serviceEndpoint
+FutureOfOrganizations/os-account-service.git /src/main/java/com/globant/os/accounts/external/shared/ClientConfiguration.java,getSocketTimeout,92,"/**
+ * Gets the socket timeout.
+ *
+ * @return the socket timeout
+ */
+public int getSocketTimeout() {
+    return socketTimeout;
+}","public int getSocketTimeout() {
+    return socketTimeout;
+}","Gets the socket timeout.
+
+@return the socket timeout
+",public int getSocketTimeout return socketTimeout
+FutureOfOrganizations/os-account-service.git /src/main/java/com/globant/os/accounts/external/shared/ClientConfiguration.java,setSocketTimeout,102,"/**
+ * Sets the socket timeout.
+ *
+ * @param socketTimeout
+ *          the new socket timeout
+ */
+public void setSocketTimeout(int socketTimeout) {
+    this.socketTimeout = socketTimeout;
+}","public void setSocketTimeout(int socketTimeout) {
+    this.socketTimeout = socketTimeout;
+}","Sets the socket timeout.
+
+@param socketTimeout the new socket timeout
+",public void setSocketTimeout int socketTimeout this socketTimeout socketTimeout
+FutureOfOrganizations/os-account-service.git /src/main/java/com/globant/os/accounts/external/shared/ClientConfiguration.java,getConnectionTimeout,111,"/**
+ * Gets the connection timeout.
+ *
+ * @return the connection timeout
+ */
+public int getConnectionTimeout() {
+    return connectionTimeout;
+}","public int getConnectionTimeout() {
+    return connectionTimeout;
+}","Gets the connection timeout.
+
+@return the connection timeout
+",public int getConnectionTimeout return connectionTimeout
+FutureOfOrganizations/os-account-service.git /src/main/java/com/globant/os/accounts/external/shared/ClientConfiguration.java,setConnectionTimeout,121,"/**
+ * Sets the connection timeout.
+ *
+ * @param connectionTimeout
+ *          the new connection timeout
+ */
+public void setConnectionTimeout(int connectionTimeout) {
+    this.connectionTimeout = connectionTimeout;
+}","public void setConnectionTimeout(int connectionTimeout) {
+    this.connectionTimeout = connectionTimeout;
+}","Sets the connection timeout.
+
+@param connectionTimeout the new connection timeout
+",public void setConnectionTimeout int connectionTimeout this connectionTimeout connectionTimeout

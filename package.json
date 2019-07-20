@@ -1,0 +1,17 @@
+{
+    "name": "ai_js_parser",
+    "version": "1.0.0",
+    "description": "JS parser for AI project",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "author": "Federico Kereki",
+    "license": "ISC",
+    "dependencies": {
+        "@babel/parser": "^7.5.5"
+    },
+    "devDependencies": {
+        "eslint": "^6.0.1"
+    }
+}
