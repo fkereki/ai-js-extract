@@ -44,4 +44,4 @@ const inspectTree = tree => {
         });
 };
 
-inspectTree(ast.program);
+inspectTree(ast.program); // see output.txt for sample output
