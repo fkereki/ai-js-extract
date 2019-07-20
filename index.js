@@ -10,6 +10,8 @@ const ast = parser.parse(code, {
     plugins: []
 });
 
+// The output.js file is for debugging purposes only
+// You can use "prettier" to get more readable code: see output2.js
 fs.writeFileSync("./output.js", "const a = " + JSON.stringify(ast));
 
 const inspectTree = tree => {
@@ -24,7 +26,7 @@ const inspectTree = tree => {
             ) {
                 console.log("Found function\n", n.id.name);
                 console.log("with comments\n", n.leadingComments[0].value);
-                //              console.log("source\n", code.substring(n.start, n.end + 1));
+                console.log("source\n", code.substring(n.start, n.end + 1));
             }
 
             if (
@@ -35,7 +37,7 @@ const inspectTree = tree => {
             ) {
                 console.log("Found method\n", n.key.name);
                 console.log("with comments\n", n.leadingComments[0].value);
-                //                console.log("source\n", code.substring(n.start, n.end + 1));
+                console.log("source\n", code.substring(n.start, n.end + 1));
             }
 
             inspectTree(n.body);
