@@ -1,7 +1,7 @@
 const parser = require("@babel/parser");
 const fs = require("fs");
 
-const code = fs.readFileSync("./input.js", "utf8");
+const code = fs.readFileSync("./samples_js/input.js", "utf8");
 
 const ast = parser.parse(code, {
     sourceType: "unambiguous",
@@ -12,7 +12,7 @@ const ast = parser.parse(code, {
 
 // The output.js file is for debugging purposes only
 // You can use "prettier" to get more readable code: see output2.js
-fs.writeFileSync("./output.js", "const a = " + JSON.stringify(ast));
+fs.writeFileSync("./samples_js/output.js", "const a = " + JSON.stringify(ast));
 
 const inspectTree = tree => {
     const hasJSDoc = obj =>

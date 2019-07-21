@@ -1,8 +1,8 @@
 {
     "name": "ai_js_parser",
     "version": "1.0.0",
-    "description": "JS parser for AI project",
-    "main": "index.js",
+    "description": "JS extraction for AI project",
+    "main": "jsextract.js",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1"
     },
@@ -13,5 +13,30 @@
     },
     "devDependencies": {
         "eslint": "^6.0.1"
+    },
+    "eslintConfig": {
+        "env": {
+            "node": true
+        },
+        "extends": "eslint:recommended",
+        "parserOptions": {
+            "ecmaVersion": 10,
+            "sourceType": "script"
+        },
+        "rules": {
+            "indent": [
+                "error",
+                4
+            ],
+            "no-var": "error",
+            "semi": [
+                "error",
+                "always"
+            ]
+        }
+    },
+    "prettier": {
+        "printWidth": 120,
+        "tabWidth": 4
     }
 }
