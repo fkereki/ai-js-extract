@@ -9,7 +9,8 @@
     "author": "Federico Kereki",
     "license": "ISC",
     "dependencies": {
-        "@babel/parser": "^7.5.5"
+        "@babel/parser": "^7.5.5",
+        "fast-csv": "^3.1.0"
     },
     "devDependencies": {
         "eslint": "^6.0.1"

@@ -1,40 +1,43 @@
 const parser = require("@babel/parser");
 const fs = require("fs");
+const csv = require("fast-csv");
 
-const code = fs.readFileSync("./samples_js/input.js", "utf8");
+const FILE_TO_PROCESS = "data_short";
 
-const ast = parser.parse(code, {
-    sourceType: "unambiguous",
-    strictMode: true,
-    tokens: false, // true: emit all tokens instead of the AST
-    plugins: []
-});
+const csvStream = csv.format({ headers: ["path", "name", "doc", "code"], quoteColumns: true });
+csvStream.pipe(fs.createWriteStream(`./samples_js/${FILE_TO_PROCESS}_output.csv`));
 
-// The output.js file is for debugging purposes only
-// You can use "prettier" to get more readable code: see output2.js
-fs.writeFileSync("./samples_js/output.js", "const a = " + JSON.stringify(ast));
+fs.createReadStream(`./samples_js/${FILE_TO_PROCESS}.csv`)
+    .pipe(csv.parse({ headers: ["repopath", "repocode"] }))
+    .on("data", row => processCode(row.repopath, row.repocode));
 
-const inspectTree = tree => {
-    const hasJSDoc = obj =>
-        obj.leadingComments && obj.leadingComments.length && obj.leadingComments[0].value.startsWith("*");
+function processCode(path, code) {
+    function inspectTree(tree) {
+        const hasJSDoc = obj =>
+            obj.leadingComments && obj.leadingComments.length && obj.leadingComments[0].value.startsWith("*");
 
-    tree &&
-        tree.body &&
-        tree.body.forEach(n => {
-            if (n.type === "FunctionDeclaration" && hasJSDoc(n)) {
-                console.log("Found function\n", n.id.name);
-                console.log("with comments\n", n.leadingComments[0].value);
-                console.log("source\n", code.substring(n.start, n.end + 1));
-            }
+        if (tree && tree.body) {
+            tree.body.forEach(n => {
+                if (n.type === "FunctionDeclaration" && hasJSDoc(n)) {
+                    csvStream.write([path, n.id.name, n.leadingComments[0].value, code.substring(n.start, n.end + 1)]);
+                }
+                if (n.type === "ClassMethod" && hasJSDoc(n)) {
+                    csvStream.write([path, n.key.name, n.leadingComments[0].value, code.substring(n.start, n.end + 1)]);
+                }
+                inspectTree(n.body);
+            });
+        }
+    }
 
-            if (n.type === "ClassMethod" && hasJSDoc(n)) {
-                console.log("Found method\n", n.key.name);
-                console.log("with comments\n", n.leadingComments[0].value);
-                console.log("source\n", code.substring(n.start, n.end + 1));
-            }
-
-            inspectTree(n.body);
+    try {
+        const ast = parser.parse(code, {
+            sourceType: "unambiguous",
+            strictMode: true,
+            tokens: false, // true: emit all tokens instead of the AST
+            plugins: []
         });
-};
-
-inspectTree(ast.program); // see output.txt for sample output
+        inspectTree(ast.program);
+    } catch (e) {
+        // nothing, now
+    }
+}
