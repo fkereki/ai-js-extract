@@ -5,21 +5,21 @@ const csv = require("fast-csv");
 const FILE_TO_PROCESS = process.argv[2] || "./samples_js/data_short.csv";
 const FILE_TO_GENERATE = FILE_TO_PROCESS.replace(/\.csv$/i, "_output$&");
 
-const parserOptions = outputTokens => ({
+const parserOptions = (outputTokens, typescript) => ({
     sourceType: "unambiguous",
     strictMode: false,
     tokens: outputTokens, // true: emit all tokens instead of the AST
     allowImportExportEverywhere: true,
     allowUndeclaredExports: true,
     plugins: [
-        "typescript",
+        typescript && "typescript",
         "jsx",
         "asyncGenerators",
         "classProperties",
         "decorators-legacy",
         "dynamicImport",
         "exportDefaultFrom"
-    ]
+    ].filter(Boolean)
 });
 
 const outputStream = csv.format({
@@ -33,7 +33,7 @@ fs.createReadStream(FILE_TO_PROCESS)
     .on("data", row => processCode(row.repopath, row.repocode));
 
 function processCode(path, code) {
-    function inspectTree(tree) {
+    function inspectTree(tree, isTypescript) {
         const hasJSDoc = obj =>
             obj.leadingComments && obj.leadingComments.length && obj.leadingComments[0].value.startsWith("*");
 
@@ -41,7 +41,7 @@ function processCode(path, code) {
             tree.body.forEach(n => {
                 if ((n.type === "FunctionDeclaration" || n.type === "ClassMethod") && hasJSDoc(n)) {
                     const tokens = parser
-                        .parse(code.substring(n.start, n.end + 1), parserOptions(true))
+                        .parse(code.substring(n.start, n.end + 1), parserOptions(true, isTypescript))
                         .tokens.map(x => x.value)
                         .filter(Boolean)
                         .join(" ");
@@ -66,8 +66,9 @@ function processCode(path, code) {
     }
 
     try {
-        const ast = parser.parse(code, parserOptions(false));
-        inspectTree(ast.program);
+        const isTypescript = path.endsWith(".ts");
+        const ast = parser.parse(code, parserOptions(false, isTypescript));
+        inspectTree(ast.program, isTypescript);
     } catch (e) {
         console.log("EXCEPTION!", e, "<**************************>", code);
     }
