@@ -60,7 +60,7 @@ function processCode(path, code) {
                     ]);
                 }
 
-                inspectTree(n.body);
+                inspectTree(n.body, isTypescript);
             });
         }
     }
